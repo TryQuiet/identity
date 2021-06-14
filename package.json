@@ -34,7 +34,7 @@
     "transformIgnorePatterns": [
       "/node_modules/"
     ],
-    "testRegex": "src/.*\\.test\\.(t|j)s$",
+    "testRegex": ".*\\.test\\.(t|j)s$",
     "testEnvironment": "node"
   },
   "dependencies": {

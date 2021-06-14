@@ -1,7 +1,7 @@
 import { KeyObject } from 'crypto'
 import { getCrypto, getAlgorithmParameters } from 'pkijs'
 
-import config from '../generatePems/config'
+import config from './config'
 
 export const signing = async (message: string, privKey: KeyObject): Promise<ArrayBuffer> => {
   const crypto = getCrypto()

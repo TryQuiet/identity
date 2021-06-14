@@ -1,11 +1,11 @@
 import { Time, setEngine, CryptoEngine, getCrypto } from 'pkijs'
 
-import { signing } from '../verify/sign'
-import { extractPubKey } from '../verify/extractPubKey'
-import { verifySignature } from '../verify/verification'
-import { createRootCA } from '../generatePems/generateRootCA'
-import { createUserCsr } from '../generatePems/requestCertificate'
-import { createUserCert } from '../generatePems/generateUserCertificate'
+import { signing } from '../src/sign'
+import { extractPubKey } from '../src/extractPubKey'
+import { verifySignature } from '../src/verification'
+import { createRootCA } from '../src/generateRootCA'
+import { createUserCsr } from '../src/requestCertificate'
+import { createUserCert } from '../src/generateUserCertificate'
 import { Crypto } from '@peculiar/webcrypto'
 
 describe('verify sign', () => {

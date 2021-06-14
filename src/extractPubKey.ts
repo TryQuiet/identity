@@ -2,7 +2,7 @@ import { fromBase64, stringToArrayBuffer } from 'pvutils'
 import { Certificate, getAlgorithmParameters } from 'pkijs'
 import { fromBER } from 'asn1js'
 
-import config from '../generatePems/config'
+import config from './config'
 
 const parseCertificate = (pem) => {
   let certificateBuffer = new ArrayBuffer(0)
