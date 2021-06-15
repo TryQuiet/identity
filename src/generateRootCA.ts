@@ -4,7 +4,13 @@ import { Certificate, AttributeTypeAndValue, BasicConstraints, Extension, getCry
 import config from './config'
 import { generateKeyPair, CertFieldsTypes } from './common'
 
-export const createRootCA = async (notBeforeDate, notAfterDate) => {
+interface RootCA { // Todo: move types to separate file
+  rootObject: Certificate,
+  rootCertString: string,
+  rootKeyString: string
+}
+
+export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date): Promise<RootCA> => {
   const rootCA = await generateRootCA({
     commonName: 'Zbay CA',
     ...config,
@@ -66,7 +72,7 @@ async function generateRootCA({
   return { certificate, ...keyPair }
 }
 
-function getCAKeyUsage() {
+function getCAKeyUsage(): BitString {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 

@@ -6,8 +6,21 @@ import {
 
 import config from './config'
 import { generateKeyPair, CertFieldsTypes } from './common'
+import { KeyObject, KeyPairKeyObjectResult } from 'crypto'
 
-export const createUserCsr = async ({ zbayNickname, commonName, peerId }) => {
+interface CertData {
+  publicKey: KeyObject,
+  privateKey: KeyObject,
+  pkcs10: any
+}
+
+interface UserCert {
+  userCsr: string,
+  userKey: string,
+  pkcs10: CertData
+}
+
+export const createUserCsr = async ({ zbayNickname, commonName, peerId }): Promise<UserCert> => {
   const pkcs10 = await requestCertificate({
     zbayNickname: zbayNickname,
     commonName: commonName,
@@ -33,8 +46,8 @@ async function requestCertificate({ zbayNickname, commonName, peerId, signAlg = 
   peerId: string
   signAlg: string
   hashAlg: string
-}) {
-  const keyPair = await generateKeyPair({ signAlg, hashAlg })
+}): Promise<CertData> {
+  const keyPair: KeyPairKeyObjectResult = await generateKeyPair({ signAlg, hashAlg })
 
   const pkcs10 = new CertificationRequest({
     version: 0,

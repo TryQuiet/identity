@@ -1,6 +1,6 @@
 import { Time, setEngine, CryptoEngine, getCrypto } from 'pkijs'
 
-import { signing } from '../src/sign'
+import { sign } from '../src/sign'
 import { extractPubKey } from '../src/extractPubKey'
 import { verifySignature } from '../src/verification'
 import { createRootCA } from '../src/generateRootCA'
@@ -37,7 +37,7 @@ describe('verify sign', () => {
     const data = {
       message: message,
       userPubKey: await extractPubKey(userCert.userCertString, crypto),
-      signature: await signing(message, user.pkcs10.privateKey)
+      signature: await sign(message, user.pkcs10.privateKey)
     }
 
     const result = await verifySignature(data.userPubKey, data.signature, data.message)
