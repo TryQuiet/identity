@@ -30,7 +30,7 @@ export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date): Pro
   }
 }
 
-async function generateRootCA({
+async function generateRootCA ({
   commonName,
   signAlg = config.signAlg,
   hashAlg = config.hashAlg,
@@ -72,7 +72,7 @@ async function generateRootCA({
   return { certificate, ...keyPair }
 }
 
-function getCAKeyUsage(): BitString {
+function getCAKeyUsage (): BitString {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 

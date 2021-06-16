@@ -40,7 +40,7 @@ export const createUserCsr = async ({ zbayNickname, commonName, peerId }): Promi
   }
 }
 
-async function requestCertificate({ zbayNickname, commonName, peerId, signAlg = config.signAlg, hashAlg = config.hashAlg }: {
+async function requestCertificate ({ zbayNickname, commonName, peerId, signAlg = config.signAlg, hashAlg = config.hashAlg }: {
   zbayNickname: string
   commonName: string
   peerId: string
