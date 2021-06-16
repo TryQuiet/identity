@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint ./src/**/*.{ts,tsx,js,jsx}"
+    "lint": "eslint --ext .jsx,.js,.ts,.tsx ./src/"
   },
   "repository": {
     "type": "git",

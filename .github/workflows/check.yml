@@ -22,7 +22,7 @@ jobs:
           node-version: "12"
       - name: extra dependencies
         if: ${{ matrix.os == 'windows-latest' }}
-        run: npm install -g windows-build-tools
+        run: npm install -g windows-build-tools@4.0.0
       - name: install dependencies
         run: npm ci
       - name: lint
