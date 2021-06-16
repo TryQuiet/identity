@@ -4,15 +4,16 @@ import { Certificate, AttributeTypeAndValue, BasicConstraints, Extension, getCry
 import config from './config'
 import { generateKeyPair, CertFieldsTypes } from './common'
 
-interface RootCA { // Todo: move types to separate file
+export interface RootCA { // Todo: move types to separate file
   rootObject: Certificate,
   rootCertString: string,
   rootKeyString: string
 }
 
-export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date): Promise<RootCA> => {
+export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date, rootCAcommonName?: string): Promise<RootCA> => {
+  const commonName = rootCAcommonName || 'Zbay CA'
   const rootCA = await generateRootCA({
-    commonName: 'Zbay CA',
+    commonName,
     ...config,
     notBeforeDate,
     notAfterDate

@@ -5,7 +5,13 @@ import config from './config'
 import { loadCertificate, loadPrivateKey, loadCSR } from './common'
 import { KeyObject } from 'crypto'
 
-export const createUserCert = async (rootCA, rootKey, userCsr, notBeforeDate, notAfterDate) => {
+export const createUserCert = async (
+  rootCA: string,
+  rootKey: string,
+  userCsr: string,
+  notBeforeDate: Date,
+  notAfterDate: Date
+) => {
   const { hashAlg, signAlg } = config
   const userCertificate = await generateuserCertificate({
     issuerCert: await loadCertificate(rootCA),

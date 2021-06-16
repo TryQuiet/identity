@@ -1,12 +1,13 @@
 {
   "name": "@zbay/identity",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Zbay tools for creating certificate and signing messages",
+  "main": "lib/index.js",
+  "types": "lib/index.d.js",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint --ext .jsx,.js,.ts,.tsx ./src/"
+    "lint": "eslint --ext .jsx,.js,.ts,.tsx ./src/ --fix"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,9 @@
     "url": "https://github.com/ZbayApp/identity/issues"
   },
   "homepage": "https://github.com/ZbayApp/identity#readme",
+  "files": [
+    "/lib/**/*"
+  ],
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest",

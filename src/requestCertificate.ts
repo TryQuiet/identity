@@ -14,13 +14,13 @@ interface CertData {
   pkcs10: any
 }
 
-interface UserCert {
+export interface UserCsr {
   userCsr: string,
   userKey: string,
   pkcs10: CertData
 }
 
-export const createUserCsr = async ({ zbayNickname, commonName, peerId }): Promise<UserCert> => {
+export const createUserCsr = async ({ zbayNickname, commonName, peerId }): Promise<UserCsr> => {
   const pkcs10 = await requestCertificate({
     zbayNickname: zbayNickname,
     commonName: commonName,

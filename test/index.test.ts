@@ -1,14 +1,13 @@
-import { Time, setEngine, CryptoEngine, getCrypto } from 'pkijs'
+import { setEngine, CryptoEngine, getCrypto } from 'pkijs'
 
 import { sign } from '../src/sign'
 import { extractPubKey } from '../src/extractPubKey'
 import { verifySignature } from '../src/verification'
-import { createRootCA } from '../src/generateRootCA'
-import { createUserCsr } from '../src/requestCertificate'
-import { createUserCert } from '../src/generateUserCertificate'
+import { verifyUserCert } from '../src/verifyUserCertificate'
 import { Crypto } from '@peculiar/webcrypto'
+import { createTestRootCA, createTestUserCert, createTestUserCsr } from './helpers'
 
-describe('verify sign', () => {
+describe('Message signature verification', () => {
   let crypto
   beforeAll(() => {
     const webcrypto = new Crypto()
@@ -20,28 +19,40 @@ describe('verify sign', () => {
     crypto = getCrypto()
   })
 
-  it('verification test', async () => {
+  it('returns true if public key and message signature are correct', async () => {
     const message = 'hello'
-    const userData = {
-      zbayNickname: 'dev99damian',
-      commonName: 'nqnw4kc4c77fb47lk52m5l57h4tcxceo7ymxekfn7yh5m66t4jv2olad.onion',
-      peerId: 'Qmf3ySkYqLET9xtAtDzvAr5Pp3egK1H3C5iJAZm1SpLEp6'
-    }
-    const notBeforeDate = new Date()
-    const notAfterDate = new Date(2030, 1, 1)
-
-    const rootCert = await createRootCA(new Time({ type: 1, value: notBeforeDate }), new Time({ type: 1, value: notAfterDate }))
-    const user = await createUserCsr(userData)
-    const userCert = await createUserCert(rootCert.rootCertString, rootCert.rootKeyString, user.userCsr, notBeforeDate, notAfterDate)
+    const rootCert = await createTestRootCA()
+    const userCsr = await createTestUserCsr()
+    const userCert = await createTestUserCert(rootCert, userCsr)
 
     const data = {
       message: message,
       userPubKey: await extractPubKey(userCert.userCertString, crypto),
-      signature: await sign(message, user.pkcs10.privateKey)
+      signature: await sign(message, userCsr.pkcs10.privateKey)
     }
 
     const result = await verifySignature(data.userPubKey, data.signature, data.message)
-
     expect(result).toBe(true)
+  })
+})
+
+describe('Certificate verification', () => {
+  it('returns false if certificate is signed with different rootCA', async () => {
+    const properRootCert = await createTestRootCA()
+
+    const differentRootCert = await createTestRootCA('Other CA')
+    const differentUserCert = await createTestUserCert(differentRootCert)
+
+    const certValid = await verifyUserCert(properRootCert.rootCertString, differentUserCert.userCertString)
+    expect(certValid).toHaveProperty('result')
+    expect(certValid.result).toBe(false)
+  })
+
+  it('returns true if certificate is signed with proper rootCA', async () => {
+    const rootCA = await createTestRootCA()
+    const userCert = await createTestUserCert(rootCA)
+    const certValid = await verifyUserCert(rootCA.rootCertString, userCert.userCertString)
+    expect(certValid).toHaveProperty('result')
+    expect(certValid.result).toBe(true)
   })
 })
