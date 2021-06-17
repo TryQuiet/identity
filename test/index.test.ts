@@ -37,22 +37,22 @@ describe('Message signature verification', () => {
 })
 
 describe('Certificate verification', () => {
-  it('returns false if certificate is signed with different rootCA', async () => {
+  it('returns false if certificate is signed with a different rootCA', async () => {
     const properRootCert = await createTestRootCA()
 
     const differentRootCert = await createTestRootCA('Other CA')
     const differentUserCert = await createTestUserCert(differentRootCert)
 
-    const certValid = await verifyUserCert(properRootCert.rootCertString, differentUserCert.userCertString)
-    expect(certValid).toHaveProperty('result')
-    expect(certValid.result).toBe(false)
+    const certVerificationResult = await verifyUserCert(properRootCert.rootCertString, differentUserCert.userCertString)
+    expect(certVerificationResult).toHaveProperty('result')
+    expect(certVerificationResult.result).toBe(false)
   })
 
-  it('returns true if certificate is signed with proper rootCA', async () => {
+  it('returns true if certificate is signed with a proper rootCA', async () => {
     const rootCA = await createTestRootCA()
     const userCert = await createTestUserCert(rootCA)
-    const certValid = await verifyUserCert(rootCA.rootCertString, userCert.userCertString)
-    expect(certValid).toHaveProperty('result')
-    expect(certValid.result).toBe(true)
+    const certVerificationResult = await verifyUserCert(rootCA.rootCertString, userCert.userCertString)
+    expect(certVerificationResult).toHaveProperty('result')
+    expect(certVerificationResult.result).toBe(true)
   })
 })

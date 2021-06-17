@@ -17,5 +17,5 @@ export const verifyUserCert = async (rootCACert: string, userCert: string): Prom
     certs: certificates,
     crls
   })
-  return certChainVerificationEngine.verify()
+  return await certChainVerificationEngine.verify()
 }
