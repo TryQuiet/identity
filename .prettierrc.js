@@ -3,7 +3,6 @@ const modifiedConfig = {
   ...prettierConfigStandard,
   singleQuote: true,
   jsxSingleQuote: true,
-  spaceBeforeFunctionParen: true,
   printWidth: 100,
   parser: 'typescript'
   // ... other modified settings here
