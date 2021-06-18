@@ -65,6 +65,12 @@ async function generateRootCA ({
       value: new PrintableString({ value: commonName })
     })
   )
+  certificate.subject.typesAndValues.push(
+    new AttributeTypeAndValue({
+      type: CertFieldsTypes.commonName,
+      value: new PrintableString({ value: commonName }),
+    })
+  )
   const keyPair = await generateKeyPair({ signAlg, hashAlg })
 
   await certificate.subjectPublicKeyInfo.importKey(keyPair.publicKey)
