@@ -43,8 +43,9 @@
     "testEnvironment": "node"
   },
   "dependencies": {
+    "@peculiar/webcrypto": "^1.1.7",
     "pkijs": "^2.1.95",
-    "@peculiar/webcrypto": "^1.1.7"
+    "prettier-config-standard": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

@@ -4,13 +4,18 @@ import { Certificate, AttributeTypeAndValue, BasicConstraints, Extension, getCry
 import config from './config'
 import { generateKeyPair, CertFieldsTypes } from './common'
 
-export interface RootCA { // Todo: move types to separate file
-  rootObject: Certificate,
-  rootCertString: string,
+export interface RootCA {
+  // Todo: move types to separate file
+  rootObject: Certificate
+  rootCertString: string
   rootKeyString: string
 }
 
-export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date, rootCAcommonName?: string): Promise<RootCA> => {
+export const createRootCA = async (
+  notBeforeDate: Date,
+  notAfterDate: Date,
+  rootCAcommonName?: string
+): Promise<RootCA> => {
   const commonName = rootCAcommonName || 'Zbay CA'
   const rootCA = await generateRootCA({
     commonName,
@@ -31,13 +36,19 @@ export const createRootCA = async (notBeforeDate: Date, notAfterDate: Date, root
   }
 }
 
-async function generateRootCA ({
+async function generateRootCA({
   commonName,
   signAlg = config.signAlg,
   hashAlg = config.hashAlg,
   notBeforeDate,
   notAfterDate
-}: { commonName: string; signAlg: string; hashAlg: string; notBeforeDate: Date; notAfterDate: Date }): Promise<Certificate> {
+}: {
+  commonName: string
+  signAlg: string
+  hashAlg: string
+  notBeforeDate: Date
+  notAfterDate: Date
+}): Promise<Certificate> {
   const basicConstr = new BasicConstraints({ cA: true, pathLenConstraint: 3 })
   const keyUsage = getCAKeyUsage()
   const certificate = new Certificate({
@@ -65,6 +76,13 @@ async function generateRootCA ({
       value: new PrintableString({ value: commonName })
     })
   )
+  certificate.subject.typesAndValues.push(
+    new AttributeTypeAndValue({
+      type: CertFieldsTypes.commonName,
+      value: new PrintableString({ value: commonName })
+    })
+  )
+
   const keyPair = await generateKeyPair({ signAlg, hashAlg })
 
   await certificate.subjectPublicKeyInfo.importKey(keyPair.publicKey)
@@ -73,7 +91,7 @@ async function generateRootCA ({
   return { certificate, ...keyPair }
 }
 
-function getCAKeyUsage (): BitString {
+function getCAKeyUsage(): BitString {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 
