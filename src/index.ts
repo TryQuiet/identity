@@ -4,6 +4,7 @@ import { verifyUserCert } from '../src/verifyUserCertificate'
 import { verifySignature } from '../src/verification'
 import { sign } from '../src/sign'
 import { createUserCsr } from '../src/requestCertificate'
+import { createUserCert } from '../src/generateUserCertificate'
 import { loadPrivateKey, loadCSR, loadCertificate, formatPEM, generateKeyPair } from '../src/common'
 
 export { createRootCA }
@@ -12,4 +13,5 @@ export { verifyUserCert }
 export { verifySignature }
 export { sign }
 export { createUserCsr }
+export { createUserCert }
 export { loadPrivateKey, loadCSR, loadCertificate, formatPEM, generateKeyPair }
