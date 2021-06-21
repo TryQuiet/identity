@@ -44,7 +44,7 @@ export const createUserCsr = async ({ zbayNickname, commonName, peerId }): Promi
   }
 }
 
-async function requestCertificate({
+async function requestCertificate ({
   zbayNickname,
   commonName,
   peerId,
