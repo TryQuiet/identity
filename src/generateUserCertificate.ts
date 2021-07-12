@@ -29,7 +29,7 @@ export const createUserCert = async (
   }
 }
 
-async function generateuserCertificate ({
+async function generateuserCertificate({
   issuerCert,
   issuerKey,
   pkcs10,
@@ -72,7 +72,7 @@ async function generateuserCertificate ({
   return { certificate }
 }
 
-function getKeyUsage () {
+function getKeyUsage() {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 

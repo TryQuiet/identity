@@ -1,11 +1,6 @@
 import { fromBER } from 'asn1js'
 import { stringToArrayBuffer, fromBase64 } from 'pvutils'
-import {
-  getAlgorithmParameters,
-  getCrypto,
-  Certificate,
-  CertificationRequest
-} from 'pkijs'
+import { getAlgorithmParameters, getCrypto, Certificate, CertificationRequest } from 'pkijs'
 
 import { KeyObject, KeyPairKeyObjectResult } from 'crypto'
 
@@ -46,7 +41,7 @@ export const formatPEM = (pemString: string): string => {
   return resultString
 }
 
-export const loadCertificate = async (rootCert: string): Certificate => {
+export const loadCertificate = (rootCert: string): Certificate => {
   const certificateBuffer = stringToArrayBuffer(fromBase64(rootCert))
   const asn1 = fromBER(certificateBuffer)
   return new Certificate({ schema: asn1.result })
