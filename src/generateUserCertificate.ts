@@ -29,7 +29,7 @@ export const createUserCert = async (
   }
 }
 
-async function generateuserCertificate({
+async function generateuserCertificate ({
   issuerCert,
   issuerKey,
   pkcs10,
@@ -48,8 +48,8 @@ async function generateuserCertificate({
   const keyUsage = getKeyUsage()
   const extKeyUsage = new ExtKeyUsage({
     keyPurposes: [
-      "1.3.6.1.5.5.7.3.2", // id-kp-clientAuth
-      "1.3.6.1.5.5.7.3.1", // id-kp-serverAuth
+      '1.3.6.1.5.5.7.3.2', // id-kp-clientAuth
+      '1.3.6.1.5.5.7.3.1' // id-kp-serverAuth
     ]
   })
   const certificate = new Certificate({
@@ -84,7 +84,7 @@ async function generateuserCertificate({
   return { certificate }
 }
 
-function getKeyUsage() {
+function getKeyUsage () {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 

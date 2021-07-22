@@ -36,7 +36,7 @@ export const createRootCA = async (
   }
 }
 
-async function generateRootCA({
+async function generateRootCA ({
   commonName,
   signAlg = config.signAlg,
   hashAlg = config.hashAlg,
@@ -53,8 +53,8 @@ async function generateRootCA({
   const keyUsage = getCAKeyUsage()
   const extKeyUsage = new ExtKeyUsage({
     keyPurposes: [
-      "1.3.6.1.5.5.7.3.2", // id-kp-clientAuth
-      "1.3.6.1.5.5.7.3.1", // id-kp-serverAuth
+      '1.3.6.1.5.5.7.3.2', // id-kp-clientAuth
+      '1.3.6.1.5.5.7.3.1' // id-kp-serverAuth
     ]
   })
   const certificate = new Certificate({
@@ -102,7 +102,7 @@ async function generateRootCA({
   return { certificate, ...keyPair }
 }
 
-function getCAKeyUsage(): BitString {
+function getCAKeyUsage (): BitString {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 
