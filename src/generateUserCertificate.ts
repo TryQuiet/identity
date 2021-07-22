@@ -1,8 +1,8 @@
 import { Integer, BitString } from 'asn1js'
-import { Certificate, BasicConstraints, Extension } from 'pkijs'
+import { Certificate, BasicConstraints, Extension, ExtKeyUsage } from 'pkijs'
 
 import config from './config'
-import { loadCertificate, loadPrivateKey, loadCSR } from './common'
+import { loadCertificate, loadPrivateKey, loadCSR, ExtensionsTypes } from './common'
 import { KeyObject } from 'crypto'
 
 export const createUserCert = async (
@@ -29,7 +29,7 @@ export const createUserCert = async (
   }
 }
 
-async function generateuserCertificate ({
+async function generateuserCertificate({
   issuerCert,
   issuerKey,
   pkcs10,
@@ -46,20 +46,32 @@ async function generateuserCertificate ({
 }): Promise<Certificate> {
   const basicConstr = new BasicConstraints({ cA: false, pathLenConstraint: 3 })
   const keyUsage = getKeyUsage()
+  const extKeyUsage = new ExtKeyUsage({
+    keyPurposes: [
+      "1.3.6.1.5.5.7.3.2", // id-kp-clientAuth
+      "1.3.6.1.5.5.7.3.1", // id-kp-serverAuth
+    ]
+  })
   const certificate = new Certificate({
     serialNumber: new Integer({ value: new Date().getTime() }),
     extensions: [
       new Extension({
-        extnID: '2.5.29.19',
+        extnID: ExtensionsTypes.basicConstr,
         critical: false,
         extnValue: basicConstr.toSchema().toBER(false),
         parsedValue: basicConstr // Parsed value for well-known extensions
       }),
       new Extension({
-        extnID: '2.5.29.15',
+        extnID: ExtensionsTypes.keyUsage,
         critical: false,
         extnValue: keyUsage.toBER(false),
         parsedValue: keyUsage // Parsed value for well-known extensions
+      }),
+      new Extension({
+        extnID: ExtensionsTypes.extKeyUsage,
+        critical: false,
+        extnValue: extKeyUsage.toSchema().toBER(false),
+        parsedValue: extKeyUsage // Parsed value for well-known extensions
       })
     ],
     issuer: issuerCert.subject,
@@ -72,12 +84,13 @@ async function generateuserCertificate ({
   return { certificate }
 }
 
-function getKeyUsage () {
+function getKeyUsage() {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 
   bitView[0] |= 0x02 // Key usage 'cRLSign' flag
   bitView[0] |= 0x04 // Key usage 'keyCertSign' flag
+  bitView[0] |= 0x08 // Key usage 'keyAgreement' flag
 
   return new BitString({ valueHex: bitArray })
 }
