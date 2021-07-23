@@ -22,6 +22,7 @@ describe('Message signature verification', () => {
 
   it('returns true if public key and message signature are correct', async () => {
     const message = 'hello'
+    const publicKey = 'publicKey'
     const rootCert = await createTestRootCA()
     const userCsr = await createTestUserCsr()
     const userCert = await createTestUserCert(rootCert, userCsr)
@@ -29,7 +30,8 @@ describe('Message signature verification', () => {
     const data = {
       message: message,
       userPubKey: await extractPubKey(userCert.userCertString, crypto),
-      signature: await sign(message, userCsr.pkcs10.privateKey)
+      signature: await sign(message, userCsr.pkcs10.privateKey),
+      publicKey: publicKey
     }
 
     const result = await verifySignature(data.userPubKey, data.signature, data.message)
@@ -63,7 +65,8 @@ describe('Certificate', () => {
     const certTypeData = {
       [CertFieldsTypes.commonName]: userData.commonName,
       [CertFieldsTypes.nickName]: userData.zbayNickname,
-      [CertFieldsTypes.peerId]: userData.peerId
+      [CertFieldsTypes.peerId]: userData.peerId,
+      [CertFieldsTypes.publicKey]: userData.publicKey
     }
     const rootCA = await createTestRootCA()
     const userCert = await createTestUserCert(rootCA)

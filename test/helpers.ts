@@ -6,13 +6,14 @@ import { createUserCsr, UserCsr } from "../src/requestCertificate"
 export const userData = {
   zbayNickname: 'userName',
   commonName: 'nqnw4kc4c77fb47lk52m5l57h4tcxceo7ymxekfn7yh5m66t4jv2olad.onion',
-  peerId: 'Qmf3ySkYqLET9xtAtDzvAr5Pp3egK1H3C5iJAZm1SpLEp6'
+  peerId: 'Qmf3ySkYqLET9xtAtDzvAr5Pp3egK1H3C5iJAZm1SpLEp6',
+  publicKey: 'publicKey'
 }
 
 const notBeforeDate = new Date()
 const notAfterDate = new Date(2030, 1, 1)
 
-export async function createTestRootCA (commonName?: string): Promise<RootCA> {
+export async function createTestRootCA(commonName?: string): Promise<RootCA> {
   return await createRootCA(new Time({ type: 1, value: notBeforeDate }), new Time({ type: 1, value: notAfterDate }), commonName)
 }
 
