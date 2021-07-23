@@ -7,7 +7,7 @@ export const userData = {
   zbayNickname: 'userName',
   commonName: 'nqnw4kc4c77fb47lk52m5l57h4tcxceo7ymxekfn7yh5m66t4jv2olad.onion',
   peerId: 'Qmf3ySkYqLET9xtAtDzvAr5Pp3egK1H3C5iJAZm1SpLEp6',
-  publicKey: 'publicKey'
+  dmPublicKey: 'publicKey'
 }
 
 const notBeforeDate = new Date()

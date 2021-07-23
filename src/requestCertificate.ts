@@ -24,12 +24,12 @@ export interface UserCsr {
   pkcs10: CertData
 }
 
-export const createUserCsr = async ({ zbayNickname, commonName, peerId, publicKey }): Promise<UserCsr> => {
+export const createUserCsr = async ({ zbayNickname, commonName, peerId, dmPublicKey }): Promise<UserCsr> => {
   const pkcs10 = await requestCertificate({
     zbayNickname: zbayNickname,
     commonName: commonName,
     peerId: peerId,
-    publicKey: publicKey,
+    dmPublicKey: dmPublicKey,
     ...config
   })
 
@@ -45,18 +45,18 @@ export const createUserCsr = async ({ zbayNickname, commonName, peerId, publicKe
   }
 }
 
-async function requestCertificate ({
+async function requestCertificate({
   zbayNickname,
   commonName,
   peerId,
-  publicKey,
+  dmPublicKey,
   signAlg = config.signAlg,
   hashAlg = config.hashAlg
 }: {
   zbayNickname: string
   commonName: string
   peerId: string
-  publicKey: string
+  dmPublicKey: ArrayBuffer
   signAlg: string
   hashAlg: string
 }): Promise<CertData> {
@@ -87,8 +87,8 @@ async function requestCertificate ({
   )
   pkcs10.subject.typesAndValues.push(
     new AttributeTypeAndValue({
-      type: CertFieldsTypes.publicKey,
-      value: new PrintableString({ value: publicKey })
+      type: CertFieldsTypes.dmPublicKey,
+      value: new OctetString({ valueHex: dmPublicKey })
     })
   )
 
