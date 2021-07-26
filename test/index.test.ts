@@ -1,5 +1,5 @@
 import { setEngine, CryptoEngine, getCrypto } from 'pkijs'
-
+import { stringToArrayBuffer } from 'pvutils'
 import { sign } from '../src/sign'
 import { extractPubKey, parseCertificate } from '../src/extractPubKey'
 import { verifySignature } from '../src/verification'
@@ -22,7 +22,9 @@ describe('Message signature verification', () => {
 
   it('returns true if public key and message signature are correct', async () => {
     const message = 'hello'
-    const dmPublicKey = 'dmPublicKey'
+    const dmPublicKey = Buffer.from('0bfb475810c0e26c9fab590d47c3d60ec533bb3c451596acc3cd4f21602e9ad9', 'hex')
+    const dmPublicKeyString = dmPublicKey.toString()
+    const dmPublicKeyArrayBuffer = stringToArrayBuffer(dmPublicKeyString)
     const rootCert = await createTestRootCA()
     const userCsr = await createTestUserCsr()
     const userCert = await createTestUserCert(rootCert, userCsr)
@@ -31,7 +33,7 @@ describe('Message signature verification', () => {
       message: message,
       userPubKey: await extractPubKey(userCert.userCertString, crypto),
       signature: await sign(message, userCsr.pkcs10.privateKey),
-      dmPublicKey: dmPublicKey
+      dmPublicKey: dmPublicKeyArrayBuffer
     }
 
     const result = await verifySignature(data.userPubKey, data.signature, data.message)
@@ -72,7 +74,11 @@ describe('Certificate', () => {
     const userCert = await createTestUserCert(rootCA)
     const parsedCert = parseCertificate(userCert.userCertString)
     for (const tav of parsedCert.subject.typesAndValues) {
-      expect(tav.value.valueBlock.value).toBe(certTypeData[tav.type])
+      if (tav.type === CertFieldsTypes.dmPublicKey) {
+        expect(tav.value.valueBlock.valueHex).toEqual(certTypeData[tav.type])
+      } else {
+        expect(tav.value.valueBlock.value).toBe(certTypeData[tav.type])
+      }
     }
   })
 })

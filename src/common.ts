@@ -23,6 +23,28 @@ export enum ExtensionsTypes {
   extKeyUsage = '2.5.29.37'
 }
 
+export function hexStringToArrayBuffer (str) {
+  const stringLength = str.length / 2
+
+  const resultBuffer = new ArrayBuffer(stringLength)
+  const resultView = new Uint8Array(resultBuffer)
+
+  // noinspection NonBlockStatementBodyJS
+  for (let i = 0; i < stringLength; i++) { resultView[i] = parseInt(str.slice(i * 2, i * 2 + 2), 16) }
+
+  return resultBuffer
+}
+
+export function arrayBufferToHexString (buffer) {
+  let resultString = ''
+  const view = new Uint8Array(buffer)
+
+  // noinspection NonBlockStatementBodyJS
+  for (const element of view) { resultString += element.toString(16).padStart(2, '0') }
+
+  return resultString
+}
+
 export const generateKeyPair = async ({
   signAlg,
   hashAlg
@@ -86,5 +108,10 @@ export const getCertFieldValue = (cert: Certificate, fieldType: string): string 
   if (!block) {
     throw new Error(`Field type ${fieldType} not found in certificate`)
   }
-  return block.value.valueBlock.value
+  if (fieldType === CertFieldsTypes.dmPublicKey) {
+    const arrayBuffer = block.value.valueBlock.valueHex
+    return arrayBufferToHexString(arrayBuffer)
+  } else {
+    return block.value.valueBlock.value
+  }
 }

@@ -45,7 +45,7 @@ export const createUserCsr = async ({ zbayNickname, commonName, peerId, dmPublic
   }
 }
 
-async function requestCertificate({
+async function requestCertificate ({
   zbayNickname,
   commonName,
   peerId,
@@ -56,7 +56,7 @@ async function requestCertificate({
   zbayNickname: string
   commonName: string
   peerId: string
-  dmPublicKey: ArrayBuffer
+  dmPublicKey: Buffer
   signAlg: string
   hashAlg: string
 }): Promise<CertData> {
