@@ -1,12 +1,12 @@
 import { setEngine, CryptoEngine, getCrypto } from 'pkijs'
-import { stringToArrayBuffer } from 'pvutils'
+import { stringToArrayBuffer, arrayBufferToString, stringToBuffer, toBase64 } from 'pvutils'
 import { sign } from '../src/sign'
 import { extractPubKey, parseCertificate } from '../src/extractPubKey'
 import { verifySignature } from '../src/verification'
 import { verifyUserCert } from '../src/verifyUserCertificate'
 import { Crypto } from '@peculiar/webcrypto'
 import { createTestRootCA, createTestUserCert, createTestUserCsr, userData } from './helpers'
-import { CertFieldsTypes } from '../src/common'
+import { CertFieldsTypes, getCertFieldValue } from '../src/common'
 
 describe('Message signature verification', () => {
   let crypto
@@ -68,17 +68,17 @@ describe('Certificate', () => {
       [CertFieldsTypes.commonName]: userData.commonName,
       [CertFieldsTypes.nickName]: userData.zbayNickname,
       [CertFieldsTypes.peerId]: userData.peerId,
-      [CertFieldsTypes.dmPublicKey]: userData.dmPublicKey
+      [CertFieldsTypes.dmPublicKey]: userData.dmPublicKeyHex
     }
+    const fieldTypesArray = Object.keys(certTypeData)
+
     const rootCA = await createTestRootCA()
     const userCert = await createTestUserCert(rootCA)
     const parsedCert = parseCertificate(userCert.userCertString)
-    for (const tav of parsedCert.subject.typesAndValues) {
-      if (tav.type === CertFieldsTypes.dmPublicKey) {
-        expect(tav.value.valueBlock.valueHex).toEqual(certTypeData[tav.type])
-      } else {
-        expect(tav.value.valueBlock.value).toBe(certTypeData[tav.type])
-      }
+
+    for (let i = 0; i < fieldTypesArray.length; i++) {
+      expect(getCertFieldValue(parsedCert, fieldTypesArray[i]))
+        .toBe(certTypeData[fieldTypesArray[i]])
     }
   })
 })
