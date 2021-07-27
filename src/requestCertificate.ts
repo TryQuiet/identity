@@ -9,7 +9,7 @@ import {
 } from 'pkijs'
 
 import config from './config'
-import { generateKeyPair, CertFieldsTypes } from './common'
+import { generateKeyPair, CertFieldsTypes, hexStringToArrayBuffer } from './common'
 import { KeyObject, KeyPairKeyObjectResult } from 'crypto'
 
 interface CertData {
@@ -61,6 +61,7 @@ async function requestCertificate ({
   hashAlg: string
 }): Promise<CertData> {
   const keyPair: KeyPairKeyObjectResult = await generateKeyPair({ signAlg, hashAlg })
+  const arrayBufferDmPubKey = hexStringToArrayBuffer(dmPublicKey)
 
   const pkcs10 = new CertificationRequest({
     version: 0,
@@ -88,7 +89,7 @@ async function requestCertificate ({
   pkcs10.subject.typesAndValues.push(
     new AttributeTypeAndValue({
       type: CertFieldsTypes.dmPublicKey,
-      value: new OctetString({ valueHex: dmPublicKey })
+      value: new OctetString({ valueHex: arrayBufferDmPubKey })
     })
   )
 

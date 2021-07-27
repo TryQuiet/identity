@@ -68,7 +68,7 @@ describe('Certificate', () => {
       [CertFieldsTypes.commonName]: userData.commonName,
       [CertFieldsTypes.nickName]: userData.zbayNickname,
       [CertFieldsTypes.peerId]: userData.peerId,
-      [CertFieldsTypes.dmPublicKey]: userData.dmPublicKeyHex
+      [CertFieldsTypes.dmPublicKey]: userData.dmPublicKey
     }
     const fieldTypesArray = Object.keys(certTypeData)
 
