@@ -1,4 +1,3 @@
-import { setEngine, CryptoEngine, getCrypto } from 'pkijs'
 import { stringToArrayBuffer } from 'pvutils'
 import { sign } from '../src/sign'
 import { extractPubKey, parseCertificate } from '../src/extractPubKey'
@@ -7,9 +6,10 @@ import { verifyUserCert } from '../src/verifyUserCertificate'
 import { Crypto } from '@peculiar/webcrypto'
 import { createTestRootCA, createTestUserCert, createTestUserCsr, userData } from './helpers'
 import { CertFieldsTypes, getCertFieldValue } from '../src/common'
+import { getCrypto, setEngine, CryptoEngine } from 'pkijs'
 
 describe('Message signature verification', () => {
-  let crypto
+  let crypto: SubtleCrypto | undefined
   beforeAll(() => {
     const webcrypto = new Crypto()
     setEngine('newEngine', webcrypto, new CryptoEngine({
@@ -70,15 +70,15 @@ describe('Certificate', () => {
       [CertFieldsTypes.peerId]: userData.peerId,
       [CertFieldsTypes.dmPublicKey]: userData.dmPublicKey
     }
-    const fieldTypesArray = Object.keys(certTypeData)
 
     const rootCA = await createTestRootCA()
     const userCert = await createTestUserCert(rootCA)
     const parsedCert = parseCertificate(userCert.userCertString)
 
-    for (let i = 0; i < fieldTypesArray.length; i++) {
-      expect(getCertFieldValue(parsedCert, fieldTypesArray[i]))
-        .toBe(certTypeData[fieldTypesArray[i]])
-    }
+    Object.keys(certTypeData).forEach(key => {
+      const keyAsEnum = key as CertFieldsTypes
+      expect(getCertFieldValue(parsedCert, keyAsEnum))
+        .toBe(certTypeData[keyAsEnum])
+    })
   })
 })

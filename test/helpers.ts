@@ -1,8 +1,8 @@
-import { Time } from 'pkijs'
 import { createRootCA, RootCA } from "../src/generateRootCA"
 import { createUserCert } from "../src/generateUserCertificate"
 import { createUserCsr, UserCsr } from "../src/requestCertificate"
 import config from '../src/config'
+import { Time } from 'pkijs'
 
 export const userData = {
   zbayNickname: 'userName',
