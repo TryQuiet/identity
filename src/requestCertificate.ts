@@ -24,7 +24,15 @@ export interface UserCsr {
   pkcs10: CertData
 }
 
-export const createUserCsr = async ({ zbayNickname, commonName, peerId, dmPublicKey }): Promise<UserCsr> => {
+export const createUserCsr = async ({ zbayNickname, commonName, peerId, dmPublicKey }:
+  {
+    zbayNickname: string
+    commonName: string
+    peerId: string
+    dmPublicKey: string
+    signAlg: string
+    hashAlg: string
+  }): Promise<UserCsr> => {
   const pkcs10 = await requestCertificate({
     zbayNickname: zbayNickname,
     commonName: commonName,
@@ -56,7 +64,7 @@ async function requestCertificate ({
   zbayNickname: string
   commonName: string
   peerId: string
-  dmPublicKey: Buffer
+  dmPublicKey: string
   signAlg: string
   hashAlg: string
 }): Promise<CertData> {

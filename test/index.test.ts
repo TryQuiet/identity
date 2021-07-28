@@ -1,5 +1,5 @@
 import { setEngine, CryptoEngine, getCrypto } from 'pkijs'
-import { stringToArrayBuffer, arrayBufferToString, stringToBuffer, toBase64 } from 'pvutils'
+import { stringToArrayBuffer } from 'pvutils'
 import { sign } from '../src/sign'
 import { extractPubKey, parseCertificate } from '../src/extractPubKey'
 import { verifySignature } from '../src/verification'

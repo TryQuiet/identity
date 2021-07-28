@@ -6,7 +6,7 @@
     "outDir": "./lib",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
   "typeRoots": [
     "./@types",
