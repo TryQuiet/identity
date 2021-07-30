@@ -15,7 +15,7 @@ export enum ExtensionsTypes {
   extKeyUsage = '2.5.29.37'
 }
 
-export function hexStringToArrayBuffer(str: string): ArrayBuffer {
+export function hexStringToArrayBuffer (str: string): ArrayBuffer {
   const stringLength = str.length / 2
 
   const resultBuffer = new ArrayBuffer(stringLength)
@@ -27,7 +27,7 @@ export function hexStringToArrayBuffer(str: string): ArrayBuffer {
   return resultBuffer
 }
 
-export function arrayBufferToHexString(buffer: Buffer): string {
+export function arrayBufferToHexString (buffer: Buffer): string {
   let resultString = ''
   const view = new Uint8Array(buffer)
 
