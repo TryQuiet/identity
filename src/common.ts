@@ -15,7 +15,7 @@ export enum ExtensionsTypes {
   extKeyUsage = '2.5.29.37'
 }
 
-export function hexStringToArrayBuffer (str: string): ArrayBuffer {
+export function hexStringToArrayBuffer(str: string): ArrayBuffer {
   const stringLength = str.length / 2
 
   const resultBuffer = new ArrayBuffer(stringLength)
@@ -27,7 +27,7 @@ export function hexStringToArrayBuffer (str: string): ArrayBuffer {
   return resultBuffer
 }
 
-export function arrayBufferToHexString (buffer: Buffer): string {
+export function arrayBufferToHexString(buffer: Buffer): string {
   let resultString = ''
   const view = new Uint8Array(buffer)
 
@@ -84,10 +84,10 @@ export const loadCSR = async (csr: string): Promise<CertificationRequest> => {
   return new CertificationRequest({ schema: asn1.result })
 }
 
-export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes | ObjectIdentifier): string => {
+export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes | ObjectIdentifier): string | null => {
   const block = cert.subject.typesAndValues.find((tav) => tav.type === fieldType)
   if (!block) {
-    throw new Error(`Field type ${fieldType} not found in certificate`)
+    return null
   }
   if (fieldType === CertFieldsTypes.dmPublicKey) {
     const arrayBuffer = block.value.valueBlock.valueHex
