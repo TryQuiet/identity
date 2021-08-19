@@ -62,7 +62,12 @@ async function generateuserCertificate ({
     ]
   })
   const attr = pkcs10.attributes as any
-  const dmPubKey = attr?.[0].values[0].valueBlock.value[1].valueBlock.value[1].valueBlock.value[0].valueBlock.valueHex
+  let dmPubKey = null
+  try {
+    dmPubKey = attr?.[0].values[0].valueBlock.value[1].valueBlock.value[1].valueBlock.value[0].valueBlock.valueHex
+  } catch (e) {
+    console.log(e)
+  }
 
   const certificate = new Certificate({
     serialNumber: new Integer({ value: new Date().getTime() }),
