@@ -86,12 +86,6 @@ async function requestCertificate ({
       value: new PrintableString({ value: peerId })
     })
   )
-  pkcs10.subject.typesAndValues.push(
-    new AttributeTypeAndValue({
-      type: CertFieldsTypes.dmPublicKey,
-      value: new OctetString({ valueHex: arrayBufferDmPubKey })
-    })
-  )
 
   await pkcs10.subjectPublicKeyInfo.importKey(keyPair.publicKey)
   const hashedPublicKey = await getCrypto()!.digest(
@@ -108,6 +102,11 @@ async function requestCertificate ({
               extnID: '2.5.29.14',
               critical: false,
               extnValue: new OctetString({ valueHex: hashedPublicKey }).toBER(false)
+            }),
+            new Extension({
+              extnID: CertFieldsTypes.dmPublicKey,
+              critical: false,
+              extnValue: new OctetString({ valueHex: arrayBufferDmPubKey }).toBER(false)
             })
           ]
         }).toSchema()

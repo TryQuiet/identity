@@ -1,7 +1,7 @@
-import { Integer, BitString } from 'asn1js'
+import { Integer, BitString, OctetString } from 'asn1js'
 
 import config from './config'
-import { loadCertificate, loadPrivateKey, loadCSR, ExtensionsTypes } from './common'
+import { loadCertificate, loadPrivateKey, loadCSR, ExtensionsTypes, CertFieldsTypes } from './common'
 import {
   Certificate, Extension, ExtKeyUsage, BasicConstraints, CertificationRequest
 } from 'pkijs'
@@ -38,7 +38,7 @@ export const createUserCert = async (
   }
 }
 
-async function generateuserCertificate ({
+async function generateuserCertificate({
   issuerCert,
   issuerKey,
   pkcs10,
@@ -61,6 +61,9 @@ async function generateuserCertificate ({
       '1.3.6.1.5.5.7.3.1' // id-kp-serverAuth
     ]
   })
+  const attr = pkcs10.attributes as any
+  const dmPubKey = attr?.[0].values[0].valueBlock.value[1].valueBlock.value[1].valueBlock.value[0].valueBlock.valueHex
+
   const certificate = new Certificate({
     serialNumber: new Integer({ value: new Date().getTime() }),
     extensions: [
@@ -81,6 +84,11 @@ async function generateuserCertificate ({
         critical: false,
         extnValue: extKeyUsage.toSchema().toBER(false),
         parsedValue: extKeyUsage // Parsed value for well-known extensions
+      }),
+      new Extension({
+        extnID: CertFieldsTypes.dmPublicKey,
+        critical: false,
+        extnValue: new OctetString({ valueHex: dmPubKey }).toBER(false)
       })
     ],
     issuer: issuerCert.subject,
@@ -93,7 +101,7 @@ async function generateuserCertificate ({
   return { certificate }
 }
 
-function getKeyUsage () {
+function getKeyUsage() {
   const bitArray = new ArrayBuffer(1)
   const bitView = new Uint8Array(bitArray)
 
