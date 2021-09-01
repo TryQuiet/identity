@@ -1,4 +1,4 @@
-import { Integer, BitString, OctetString } from 'asn1js'
+import { Integer, BitString, OctetString, PrintableString } from 'asn1js'
 
 import config from './config'
 import { loadCertificate, loadPrivateKey, loadCSR, ExtensionsTypes, CertFieldsTypes } from './common'
@@ -63,10 +63,15 @@ async function generateuserCertificate ({
   })
   const attr = pkcs10.attributes as any
   let dmPubKey = null
+  let zbayNickName = null
+  let peerId = null
+
   try {
     dmPubKey = attr?.[0].values[0].valueBlock.value[1].valueBlock.value[1].valueBlock.value[0].valueBlock.valueHex
-  } catch (e) {
-    console.log(e)
+    zbayNickName = attr?.[0].values[0].valueBlock.value[2].valueBlock.value[1].valueBlock.value[0].valueBlock.value
+    peerId = attr?.[0].values[0].valueBlock.value[3].valueBlock.value[1].valueBlock.value[0].valueBlock.value
+  } catch (err) {
+    throw new Error('Cannot get certificate request extension')
   }
 
   const certificate = new Certificate({
@@ -94,6 +99,16 @@ async function generateuserCertificate ({
         extnID: CertFieldsTypes.dmPublicKey,
         critical: false,
         extnValue: new OctetString({ valueHex: dmPubKey }).toBER(false)
+      }),
+      new Extension({
+        extnID: CertFieldsTypes.nickName,
+        critical: false,
+        extnValue: new PrintableString({ value: zbayNickName }).toBER(false)
+      }),
+      new Extension({
+        extnID: CertFieldsTypes.peerId,
+        critical: false,
+        extnValue: new PrintableString({ value: peerId }).toBER(false)
       })
     ],
     issuer: issuerCert.subject,

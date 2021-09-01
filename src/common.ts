@@ -91,12 +91,16 @@ export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes 
   if (!block && !ext) {
     return null
   }
+  if (ext) {
+    if (fieldType === CertFieldsTypes.dmPublicKey) {
+      const extObj = ext?.extnValue.valueBlock.value[0] as any
+      const arrayBuffer = extObj.valueBlock.valueHex
 
-  if (fieldType === CertFieldsTypes.dmPublicKey) {
-    const extObj = ext?.extnValue.valueBlock.value[0] as any
-    const arrayBuffer = extObj.valueBlock.valueHex
-
-    return arrayBufferToHexString(arrayBuffer)
+      return arrayBufferToHexString(arrayBuffer)
+    } else {
+      const extObj = ext?.extnValue.valueBlock.value[0] as any
+      return extObj.valueBlock.value
+    }
   } else {
     return block?.value.valueBlock.value
   }
