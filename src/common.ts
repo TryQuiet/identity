@@ -107,36 +107,17 @@ export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes 
 
 export const getReqFieldValue = (csr: CertificationRequest, fieldType: CertFieldsTypes | ObjectIdentifier): string | null => {
   const block = csr.subject.typesAndValues.find((tav) => tav.type === fieldType)
-  const attributes = csr.attributes as any
-
-  const ext = attributes[0].values[0].valueBlock.value.find((tav: any) => {
-    const localSidValueBlockArray = tav.valueBlock.value[0].valueBlock.value
-    let extnId = null
-    for (const value of localSidValueBlockArray) {
-      if (!extnId) {
-        if (value.valueDec >= 80) {
-          const firstIdValue = (value.valueDec - 60) / 10
-          extnId = `${firstIdValue}`
-        } else if (value.valueDec >= 40) {
-          const firstIdValue = (value.valueDec - 30) / 10
-          extnId = `${firstIdValue}`
-        }
-      } else {
-        extnId = `${extnId}.${value.valueDec}`
-      }
-    }
-    return extnId === fieldType
-  })
+  const ext = csr.attributes?.find((tav) => tav.type === fieldType) as any
 
   if (!block && !ext) {
     return null
   }
   if (ext) {
     if (fieldType === CertFieldsTypes.dmPublicKey) {
-      const extObj = ext?.valueBlock.value[1].valueBlock.value[0].valueBlock.valueHex as any
+      const extObj = ext.values[0].valueBlock.valueHex
       return arrayBufferToHexString(extObj)
     } else {
-      return ext?.valueBlock.value[1].valueBlock.value[0].valueBlock.value as any
+      return ext.values[0].valueBlock.value
     }
   } else {
     return block?.value.valueBlock.value
