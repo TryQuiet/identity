@@ -100,9 +100,10 @@ export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes 
       const extObj = ext?.extnValue.valueBlock.value[0] as any
       return extObj.valueBlock.value
     }
-  } else {
+  } else if (block) {
     return block?.value.valueBlock.value
   }
+  return null
 }
 
 export const getReqFieldValue = (csr: CertificationRequest, fieldType: CertFieldsTypes | ObjectIdentifier): string | null => {
@@ -119,7 +120,8 @@ export const getReqFieldValue = (csr: CertificationRequest, fieldType: CertField
     } else {
       return ext.values[0].valueBlock.value
     }
-  } else {
+  } else if (block) {
     return block?.value.valueBlock.value
   }
+  return null
 }
