@@ -101,4 +101,27 @@ describe('Certificate', () => {
         .toBe(certTypeData[keyAsEnum])
     })
   })
+
+  it('old certificate cannot contains proper data', async () => {
+    const certTypeData = {
+      [CertFieldsTypes.commonName]: userData.commonName,
+      [CertFieldsTypes.nickName]: userData.zbayNickname,
+      [CertFieldsTypes.peerId]: userData.peerId,
+      [CertFieldsTypes.dmPublicKey]: userData.dmPublicKey
+    }
+    let badFieldCounter = 0
+
+    const parsedCert = parseCertificate('MIIB7TCCAZMCBgF641h5xzAKBggqhkjOPQQDAjASMRAwDgYDVQQDEwdaYmF5IENBMB4XDTIxMDcyNjE1MDQyNFoXDTMwMDIwMTAwMDAwMFowgc4xgcswHAYKKwYBBAGDjBsCARMOZGV2OTlkZXY5OXlvZGEwPwYDVQQDEzgzNWNzNmZramJoZmJiMnppYnIzNm5rdXY0cWlld2x2NXBmcGprbHh2N2xtcGphM2hydTN3NDdpZDA7BgkrBgECAQ8DAQETLlFtVmIxbUZ2Z1hKZXRKS0o1NmRtR1Q2Rkd1TnJtM0VhVFZ6V3VHaGtxcjZodjUwLQYJKoZIhvcNAQkMBCCf3wijnripB3ZADnDgT1ZIr1zUGjHVZI2K4kt6Yb7CazBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABDKw/zcoE2Vahw3q9CdRQsCXikFU8PhEIN/y65hrB6yAxWH4Ut9QBKMMAnaG8JlzvEeaScQiu5Jyyx0O0xAadQ+jHTAbMAwGA1UdEwQFMAMCAQMwCwYDVR0PBAQDAgAGMAoGCCqGSM49BAMCA0gAMEUCIQCRz+6W3K3SI7Q7uYDVVIJXnWud/DGvpqHCuLJ+gnJLMgIgBmS1D8s1xnGOQpARx40vus4b/f49LQeG2YxPCSHVQOM=')
+
+    Object.keys(certTypeData).forEach(key => {
+      const keyAsEnum = key as CertFieldsTypes
+      const field = getCertFieldValue(parsedCert, keyAsEnum)
+
+      if (!field) {
+        badFieldCounter++
+      }
+    })
+
+    expect(badFieldCounter > 0).toBeTruthy()
+  })
 })

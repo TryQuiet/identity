@@ -101,7 +101,11 @@ export const getCertFieldValue = (cert: Certificate, fieldType: CertFieldsTypes 
       return extObj.valueBlock.value
     }
   } else if (block) {
-    return block?.value.valueBlock.value
+    if (Array.isArray(block?.value.valueBlock.value)) {
+      return null
+    } else {
+      return block?.value.valueBlock.value
+    }
   }
   return null
 }
