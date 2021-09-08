@@ -107,7 +107,7 @@ describe('Certificate', () => {
 
     expect(getCertFieldValue(parsedCert, CertFieldsTypes.dmPublicKey)).toEqual(null)
     expect(getCertFieldValue(parsedCert, CertFieldsTypes.commonName)).toEqual('35cs6fkjbhfbb2zibr36nkuv4qiewlv5pfpjklxv7lmpja3hru3w47id')
-    expect(getCertFieldValue(parsedCert, CertFieldsTypes.peerId)).toEqual('QmVb1mFvgXJetJKJ56dmGT6FGuNrm3EaTVzWuGhkqr6hv5')
-    expect(getCertFieldValue(parsedCert, CertFieldsTypes.nickName)).toEqual('dev99dev99yoda')
+    expect(getCertFieldValue(parsedCert, CertFieldsTypes.peerId)).toEqual(null)
+    expect(getCertFieldValue(parsedCert, CertFieldsTypes.nickName)).toEqual(null)
   })
 })
